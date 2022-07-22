@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2&display=swap" rel="stylesheet">
+    <link rel="shortcut icon" href="./cloudy.png" type="image/x-icon">
+    <style>
+     .editable{width: 545px;}
+        @media screen and (max-width: 545px) {
+          .editable{
+            width:100vw;
+  }
+}
+
+#weather .fa {
+        font-size: 6rem;
+        animation: fa-anime 2.5s linear infinite alternate;
+      }
+
+      @keyframes fa-anime {
+        from {
+          transform: scale(0.9);
+        }
+        to {
+          transform: scale(1.2);
+        }
+      }
+    </style>
+    <title>OpenWeatherApp</title>
+</head>
+<body style="display: flex;flex-direction: column;justify-content: center;align-items: center;height: 100vh;background-image: url('https://source.unsplash.com/1600x900/?landscape');background-size: 100% 100%;opacity: 0.85;">
+    <header>
+        <nav class="navbar" style="background-color: #c3ddee;">
+            <div class="container-fluid">
+              <a class="navbar-brand" style="font-family: 'Baloo 2', cursive; font-size:1.7rem;">WeatherJaano.com</a>
+              <form class="d-flex" role="search" action="/" method="POST">
+                <input class="form-control me-2" type="search" placeholder="City name" aria-label="Search" id="cityname" name="city">
+                <button class="btn btn-outline-success" id="citysearch" type="submit">Search</button>
+              </form>
+            </div>
+        </nav>
+    </header>
+
+<main>
+    <div class="card editable" style="background: #333;color: white">
+      <!-- <img src="..." class="card-img-top" alt="...">
+       -->
+       <div class="card-body">
+         <div id="weather" style="display: flex;justify-content: center;align-items: center;font-size: 3rem;"> <i class="fa fa-cloud-rain" style="font-size:3rem;"></i></i></div>
+        <h4 class="card-title place"><%=location%></h5>
+        <div class="card-text">Weather Status: <%=tempStatus%></div>
+        <p class="card-text" id="date"></p>
+        <div class="card-text curr">Temperature: <%=temp%>&deg;C</div>
+        <div class="card-text feel">Feels Like: <%=feeltemp%>&deg;C</div>
+        <!-- <div class="card-text">Max Temp: {%maxtemp%}&deg;C</div> -->
+        <div class="card-text">Humidity: <%=humidity%>&percnt;</div>
+        <div class="card-text">Wind-Speed: <%=windspeed%>KpH</div>
+
+      </div>
+    </div>
+  </main>
+  <script src="./index.js"></script>
+    <script>
+      const datee=document.getElementById("date");
+      const currWeather=document.getElementById("weather");
+
+
+      // var iconchange =()=> {
+      const tempStatus = "<%=tempStatus%>";
+      if (tempStatus == "Sunny") {
+        currWeather.innerHTML =
+          "<i class='fa fa-sun' style='color: #eccc68;'></i>";
+      } else if (tempStatus == "Clouds") {
+        currWeather.innerHTML =
+          "<i class='fa fa-cloud' style='color: #eee;'></i>";
+      } else if (tempStatus == "Drizzle"||tempStatus == "Rain") {
+        currWeather.innerHTML =
+          "<i class='fa fa-cloud-rain' style='color: #ddd;'></i>";
+      } else if (tempStatus == "ThunderStorm") {
+        currWeather.innerHTML =
+          "<i class='fa fa-cloud-showers-heavy' style='color: #ddd;'></i>";
+      } else if (tempStatus == "Haze"||tempStatus=="Mist"||tempStatus=="Smoke"||tempStatus=="Dust"||tempStatus=="Fog"||tempStatus=="Ash"||tempStatus=="Tornado"||tempStatus=="Sand") {
+        currWeather.innerHTML =
+          "<i class='fa fa-smog' style='color: #eee;'></i>";
+      } else if (tempStatus == "Snow") {
+        currWeather.innerHTML =
+        "<i class='fa fa-SnowFlake' style='color: #eee;'></i>";
+      } else if (tempStatus == "") {
+        currWeather.innerHTML =
+          "";
+      } else {
+        currWeather.innerHTML =
+          "<i class='fa fa-sun' style='color:#eccc68;'></i>";
+      }
+    // };
+
+      const getCurrentDay = () => {
+        var currentTime = new Date();
+        let day = new Array(7);
+        day[0] = "Sunday";
+        day[1] = "Monday";
+        day[2] = "Tue";
+        day[3] = "Wed";
+        day[4] = "Thursday";
+        day[5] = "Friday";
+        day[6] = "Saturday";
+
+        let currDay = day[currentTime.getDay()]; //week's day according to index
+        return currDay;
+      };
+
+
+        const getCurrentTime = () => {
+        var months = [
+          "Jan","Feb","Mar","Apr",
+          "May","June","July","Aug",
+          "Sept","Oct","Nov","Dec",
+        ];
+
+        let currTime = new Date();
+        let year=currTime.getFullYear();
+        let month = months[currTime.getMonth() + 1];
+        let date = currTime.getDate();
+        let hours = currTime.getHours();
+        let mins = currTime.getMinutes();
+        let ampm = "AM";
+
+        if (hours > 11) {
+          ampm = "PM";
+          if (hours > 12) hours -= 12;
+        }
+        if (mins < 10) {
+          mins = "0" + mins;
+        }
+        // year%=100;
+
+        return `${hours}:${mins}${ampm} | ${date} ${month} ${year}`;
+      };
+
+      datee.innerHTML= getCurrentTime()+'('+getCurrentDay()+')';
+
+      window.onload(iconchange());
+    </script>
+</body>
+</html>
